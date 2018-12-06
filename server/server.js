@@ -20,13 +20,21 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => { // Lister for a new connection
   console.log('New user connected');
 
-  // socket.emit() emit an event to a single connection
-  // socket.emit('newMessage', {
-  //   from: 'Mike',
-  //   text: 'Hey! What is going on',
-  //   createdAt: 177389
-  // });
+  // socket.emit() emit an event to this single connection
+  socket.emit('newMessage', {
+    from: 'Admin',
+    text: 'Hey! Welcome to the chat app',
+    createdAt: new Date().getTime()
+  });
 
+  // socket.broadcast.emit() is going to emmit an event to every single
+  // connection BUT this socket
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'New user joined',
+    createdAt: new Date().getTime()
+  });
+  
   // Custom event
   socket.on('createMessage', message => {
     console.log('createMessage', message);
@@ -37,6 +45,12 @@ io.on('connection', (socket) => { // Lister for a new connection
       text: message.text,
       createdAt: new Date().getTime()
     });
+
+    // socket.broadcast.emit('newMessage', {
+    //     from: message.from,
+    //     text: message.text,
+    //     createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect', () => {
