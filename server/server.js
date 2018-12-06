@@ -28,12 +28,13 @@ io.on('connection', (socket) => { // Lister for a new connection
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'));
 
   // Custom event
-  socket.on('createMessage', message => {
+  // If you want to use event acknowledgments to let your emitters know some state
+  // on your server you must use callbacks
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
-
     // io.emit() emit an event to every single connection
     io.emit('newMessage', generateMessage(message.from, message.text));
-
+    callback();
     // socket.broadcast.emit('newMessage', {
     //     from: message.from,
     //     text: message.text,

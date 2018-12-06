@@ -18,5 +18,19 @@ socket.on('disconnect', function () {
 });
 // Custom event
 socket.on('newMessage', function (message) {
-  console.log('New message', message);
+  const li = jQuery('<li></li>');
+  li.text(`${message.from}: ${message.text}`);
+  jQuery('#messages').append(li);
+});
+
+jQuery('#message-form').on('submit', function (e) {
+  e.preventDefault();
+
+  // The callback function is for the acknowledgment event
+  socket.emit('createMessage', {
+    from: 'User',
+    text: jQuery('[name=message]').val() // Get the value of the element with the name att = message
+  }, function () {
+
+  });
 });
