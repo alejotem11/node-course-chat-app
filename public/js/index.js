@@ -19,23 +19,28 @@ socket.on('disconnect', function () {
 // Custom event
 socket.on('newMessage', function (message) {
   const formattedTime = moment(message.createdAt).format('h:mm a');
-  const li = jQuery('<li></li>');
-  li.text(`${message.from} ${formattedTime}: ${message.text}`);
-  jQuery('#messages').append(li);
+  const template = jQuery('#message-template').html(); // Taking the html content
+  const html = Mustache.render(template, { // Replacing the variables with the corresponding values
+    text: message.text,
+    from: message.from,
+    createdAt: formattedTime
+  });
+  jQuery('#messages').append(html);
+  // const formattedTime = moment(message.createdAt).format('h:mm a');
+  // const li = jQuery('<li></li>');
+  // li.text(`${message.from} ${formattedTime}: ${message.text}`);
+  // jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function (message) {
   const formattedTime = moment(message.createdAt).format('h:mm a');
-  const li = jQuery('<li></li>');
-  const a = jQuery('<a target="_blank">My current location</a>');
-  // It is better to use the jquery methods for dynamic content, instead of
-  // using string templates while defining the variables above to avoid malicious
-  // injection
-  li.text(`${message.from} ${formattedTime}:`);
-  a.attr('href', message.url);
-
-  li.append(a);
-  jQuery('#messages').append(li);
+  const template = jQuery('#location-message-template').html();
+  const html = Mustache.render(template, {
+    url: message.url,
+    from: message.from,
+    createdAt: formattedTime
+  });
+  jQuery('#messages').append(html);
 });
 
 jQuery('#message-form').on('submit', function (e) {

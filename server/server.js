@@ -21,7 +21,7 @@ io.on('connection', (socket) => { // Lister for a new connection
   console.log('New user connected');
 
   // socket.emit() emit an event to this single connection
-  socket.emit('newMessage', generateMessage('Admin', 'Hey. Welocom to the chat app'));
+  socket.emit('newMessage', generateMessage('Admin', 'Hey. Welcome to the chat app'));
 
   // socket.broadcast.emit() is going to emmit an event to every single
   // connection BUT this socket
