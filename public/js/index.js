@@ -18,18 +18,20 @@ socket.on('disconnect', function () {
 });
 // Custom event
 socket.on('newMessage', function (message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a');
   const li = jQuery('<li></li>');
-  li.text(`${message.from}: ${message.text}`);
+  li.text(`${message.from} ${formattedTime}: ${message.text}`);
   jQuery('#messages').append(li);
 });
 
 socket.on('newLocationMessage', function (message) {
+  const formattedTime = moment(message.createdAt).format('h:mm a');
   const li = jQuery('<li></li>');
   const a = jQuery('<a target="_blank">My current location</a>');
   // It is better to use the jquery methods for dynamic content, instead of
   // using string templates while defining the variables above to avoid malicious
   // injection
-  li.text(`${message.from}:`);
+  li.text(`${message.from} ${formattedTime}:`);
   a.attr('href', message.url);
 
   li.append(a);
