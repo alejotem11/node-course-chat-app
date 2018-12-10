@@ -22,8 +22,16 @@ function scrollToBottom () {
 // functions because with some clients (i.e. android or ios) this could
 // cause the app to crash
 socket.on('connect', function () {
-  console.log('Connected to server');
-
+  // To get an object from the query params from an url:
+  const params = jQuery.deparam(window.location.search); // This is done because of adding the /libs/deparam.js file
+  socket.emit('join', params, function (err) { // The callback function is for the acknowledgment function
+    if (err) {
+      alert(err);
+      window.location.href = '/'; // Redirect back the user to the root page
+    } else {
+      console.log('No error');
+    }
+  });
   // socket.emit('createMessage', {
   //   from: 'Alejo',
   //   text: 'Hey. This is Alejandro.'
@@ -59,6 +67,14 @@ socket.on('newLocationMessage', function (message) {
   });
   jQuery('#messages').append(html);
   scrollToBottom();
+});
+
+socket.on('updateUsersList', function (users) {
+  const ol = jQuery('<ol></ol>');
+  users.forEach(function (user) {
+    ol.append(jQuery('<li></li>').text(user));
+  });
+  jQuery('#users').html(ol);
 });
 
 jQuery('#message-form').on('submit', function (e) {
