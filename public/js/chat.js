@@ -83,7 +83,6 @@ jQuery('#message-form').on('submit', function (e) {
   const messageTextbox = jQuery('[name=message]');
   // The callback function is for the acknowledgment event
   socket.emit('createMessage', {
-    from: 'User',
     text: messageTextbox.val() // Get the value of the element with the name att = message
   }, function () {
     messageTextbox.val(''); // Setting the value to empty
